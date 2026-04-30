@@ -5,7 +5,17 @@ from model import build_features, train_model, filter_bad_odds
 from odds_fetcher import get_tennis_odds, parse_odds
 
 def build_name_map(df: pd.DataFrame) -> dict:
-    players = set(df["Player_1"].unique()) | set(df["Player_2"].unique())
+    # Build from raw CSVs so we catch ALL players, even if filtered out
+    import os
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    atp = pd.read_csv(os.path.join(BASE_DIR, "data", "atp", "atp_tennis.csv"), low_memory=False)
+    wta = pd.read_csv(os.path.join(BASE_DIR, "data", "wta", "wta.csv"), low_memory=False)
+
+    players = set()
+    for d in [atp, wta]:
+        players.update(d["Player_1"].dropna().unique())
+        players.update(d["Player_2"].dropna().unique())
+
     name_map = {}
     for p in players:
         name_map[p.lower().strip()] = p
@@ -16,25 +26,30 @@ def match_name(full_name: str, name_map: dict) -> str:
     if len(parts) < 2:
         return None
 
-    first = parts[0]
-    last = " ".join(parts[1:])
+    # Try all possible splits (handles names like "De Minaur Alex")
+    for i in range(1, len(parts)):
+        first = " ".join(parts[:i])
+        last = " ".join(parts[i:])
 
-    attempts = [
-        f"{last} {first[0]}.",
-        f"{first} {last[0]}.",
-        f"{last} {first[0]}",
-    ]
+        attempts = [
+            f"{last} {first[0]}.",        # Kostyuk M.
+            f"{last} {first[0]}",         # Kostyuk M
+            f"{first} {last[0]}.",        # Marta K.
+        ]
 
-    for attempt in attempts:
-        key = attempt.lower().strip()
-        if key in name_map:
-            return name_map[key]
+        for attempt in attempts:
+            key = attempt.lower().strip()
+            if key in name_map:
+                return name_map[key]
 
-    for attempt in attempts:
-        key = attempt.lower().strip().rstrip(".")
-        for map_key in name_map:
-            if map_key.rstrip(".") == key:
-                return name_map[map_key]
+        # Fuzzy match — check if last name matches any key
+        for map_key, original in name_map.items():
+            map_last = map_key.split()[0] if map_key else ""
+            if last.lower() == map_last and len(map_key.split()) > 1:
+                # Verify first initial matches
+                map_initial = map_key.split()[-1][0] if len(map_key.split()) > 1 else ""
+                if first[0].lower() == map_initial.lower():
+                    return original
 
     return None
 

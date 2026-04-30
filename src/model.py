@@ -228,7 +228,7 @@ def train_model(df: pd.DataFrame):
         "is_clay", "is_grass"
     ]
 
-    clean = df.dropna(subset=features + ["p1_won"]).copy()
+    clean = df.dropna(subset=["p1_won", "book_logit"]).copy()
     print(f"\nTraining on {len(clean)} matches")
 
     X = clean[features]
