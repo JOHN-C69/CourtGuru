@@ -1,0 +1,157 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #0a0a0a;
+  color: #e0e0e0;
+  min-height: 100vh;
+}
+
+/* --- Header --- */
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+
+h1 { font-size: 26px; }
+
+.updated {
+  font-size: 13px;
+  color: #555;
+}
+
+/* --- Stats Cards --- */
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* --- Filters --- */
+.filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filters select {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  color: #ccc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.edge-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #888;
+}
+
+.edge-filter input[type="range"] {
+  accent-color: #4ade80;
+  width: 120px;
+}
+
+/* --- Table --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 2px solid #1e1e1e;
+  color: #666;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+th:hover { color: #aaa; }
+
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #151515;
+  font-size: 14px;
+}
+
+tr:hover { background: #121212; }
+
+.match-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.surface {
+  font-size: 11px;
+  color: #555;
+}
+
+.pick-cell {
+  color: #fff;
+  font-weight: 600;
+}
+
+.edge {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.confidence-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.status {
+  text-align: center;
+  color: #555;
+  margin-top: 60px;
+  font-size: 16px;
+}
